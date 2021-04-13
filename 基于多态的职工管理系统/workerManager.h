@@ -1,10 +1,12 @@
 #pragma once
 #include<iostream>
-using namespace std;
+#include<fstream>
 #include"worker.h"
 #include"employee.h"
 #include"manager.h"
 #include"boss.h"
+using namespace std;
+#define FILENAME "workerinfo.txt"
 
 
 class	WorkerManager

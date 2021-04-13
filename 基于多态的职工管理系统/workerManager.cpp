@@ -29,6 +29,22 @@ void WorkerManager::exitMenu()
 	exit(0);
 }
 
+//保存文件函数（ios::out形式）
+void WorkerManager::save()
+{
+	ofstream ofs;
+	ofs.open(FILENAME, ios::out);
+
+	for (int i = 0; i < this->workerNum; i++)
+	{
+		ofs << this->workerArray[i]->worker_ID << " "
+			<< this->workerArray[i]->worker_Name << " "
+			<< this->workerArray[i]->worker_JobName << endl;
+	}
+
+	ofs.close();
+}
+
 //添加员工函数
 void WorkerManager::addWorker()
 {
@@ -106,6 +122,8 @@ void WorkerManager::addWorker()
 		{
 			this->workerArray[i]->showInfo();
 		}
+
+		this->save();
 	}
 	else
 	{
