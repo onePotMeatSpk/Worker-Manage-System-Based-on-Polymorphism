@@ -2,8 +2,33 @@
 
 WorkerManager::WorkerManager()
 {
-	this->workerNum = 0;
-	this->workerArray = NULL;
+	ifstream ifs;
+	ifs.open(FILENAME, ios::in);
+
+	//判断文件是否存在
+	if (!ifs.is_open())
+	{
+		cout << "不存在员工信息文件，没有员工信息！！！" << endl;
+		this->workerNum = 0;
+		this->workerArray = NULL;
+		this->isFileEmpty = true;
+		ifs.close();
+		return;
+	}
+
+	//判断文件是否为空
+	char ch;
+	ifs >> ch;
+	if(ifs.eof())
+	{
+		cout << "文件为空，没有员工信息！！！" << endl;
+		this->workerNum = 0;
+		this->workerArray = NULL;
+		this->isFileEmpty = true;
+		ifs.close();
+		return;
+	}
+	
 }
 
 WorkerManager::~WorkerManager()

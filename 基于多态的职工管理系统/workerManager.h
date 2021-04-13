@@ -1,5 +1,4 @@
 #pragma once
-#include<iostream>
 #include<fstream>
 #include"worker.h"
 #include"employee.h"
@@ -34,6 +33,9 @@ public:
 public:
 	//现有员工个数
 	int workerNum;
+
+	//文件是否为空标识
+	bool isFileEmpty;
 
 	//员工列表
 	Worker** workerArray;
