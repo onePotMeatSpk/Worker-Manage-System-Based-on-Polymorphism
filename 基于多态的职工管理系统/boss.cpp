@@ -20,5 +20,5 @@ void Boss::showInfo()
 
 string Boss::getJobName()
 {
-	return("Boss");
+	return("¿œ∞Â");
 }

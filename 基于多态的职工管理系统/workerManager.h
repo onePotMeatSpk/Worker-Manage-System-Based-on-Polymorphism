@@ -27,8 +27,17 @@ public:
 	//保存文件函数
 	void save();
 
+	//获取文件中员工数量函数
+	int getWorkerNum();
+
+	//初始化员工列表函数
+	void initWorkerArray();
+
 	//添加员工函数
 	void addWorker();
+	
+	//显示员工函数
+	void showWorker();
 
 public:
 	//现有员工个数

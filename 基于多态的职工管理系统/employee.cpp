@@ -20,5 +20,5 @@ void Employee::showInfo()
 
 string Employee::getJobName()
 {
-	return("Employee");
+	return("¾Â²Ë");
 }

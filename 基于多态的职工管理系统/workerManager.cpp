@@ -28,7 +28,21 @@ WorkerManager::WorkerManager()
 		ifs.close();
 		return;
 	}
-	
+
+	//文件中存在员工时，将员工信息导入到员工列表中
+	if (!isFileEmpty)
+	{
+		//取得文件内员工数量
+		this->workerNum = this->getWorkerNum();
+		cout << "现有员工数量：" << this->workerNum << endl;
+
+		//初始化员工列表
+		this->workerArray = new Worker * [this->workerNum];
+		this->initWorkerArray();
+
+		//显示现有员工
+		this->showWorker();
+	}
 }
 
 WorkerManager::~WorkerManager()
@@ -45,6 +59,7 @@ void WorkerManager::showMenu()
 	cout << "*************员工管理系统*************" << endl;
 	cout << "********* Press 0: 退出系统 **********" << endl;
 	cout << "********* Press 1: 添加员工 **********" << endl;
+	cout << "********* Press 2: 显示员工 **********" << endl;
 }
 
 void WorkerManager::exitMenu()
@@ -68,6 +83,58 @@ void WorkerManager::save()
 	}
 
 	ofs.close();
+}
+
+//获取文件中员工数量函数
+int WorkerManager::getWorkerNum()
+{
+	ifstream ifs;
+	ifs.open(FILENAME, ios::in);
+
+	int num=0;
+
+	int id;
+	string name;
+	int jobname;
+
+	while (ifs>>id && ifs>>name && ifs>>jobname)
+	{
+		num++;
+	}
+	ifs.close();
+	return num;
+}
+
+//初始化员工列表函数
+void WorkerManager::initWorkerArray()
+{
+	ifstream ifs;
+	ifs.open(FILENAME, ios::in);
+	int index = 0;
+
+	int id;
+	string name;
+	int jobname;
+	while(ifs>>id && ifs>>name && ifs>>jobname)
+	{
+		Worker* worker = NULL;
+		switch (jobname)
+		{
+		case 1:
+			worker = new Employee(id, name, jobname);
+			break;
+		case 2:
+			worker = new Manager(id, name, jobname);
+			break;
+		case 3:
+			worker = new Boss(id, name, jobname);
+			break;
+		default:
+			break;
+		}
+		this->workerArray[index] = worker;
+		index++;
+	}
 }
 
 //添加员工函数
@@ -141,13 +208,10 @@ void WorkerManager::addWorker()
 		//提示信息
 		cout << "添加成功！" << endl;
 
-		//显示所有员工
-		cout << "现有员工：" << endl;
-		for (int i = 0; i < this->workerNum; i++)
-		{
-			this->workerArray[i]->showInfo();
-		}
+		//显示现有员工
+		this->showWorker();
 
+		//保存添加的员工到文件中
 		this->save();
 	}
 	else
@@ -155,4 +219,14 @@ void WorkerManager::addWorker()
 		cout << "输入信息有误！" << endl;
 	}
 
+}
+
+//显示员工函数
+void WorkerManager::showWorker()
+{
+	cout << "现有员工：" << endl;
+	for (int i = 0; i < this->workerNum; i++)
+	{
+		this->workerArray[i]->showInfo();
+	}
 }

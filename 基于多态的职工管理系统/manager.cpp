@@ -20,5 +20,5 @@ void Manager::showInfo()
 
 string Manager::getJobName()
 {
-	return("Manager");
+	return("ื฿นท");
 }
