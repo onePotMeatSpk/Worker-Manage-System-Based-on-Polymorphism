@@ -23,11 +23,21 @@ int main()
 		case 1:
 			wm.addWorker();
 			break;
+		case 2:
+			wm.showWorker();
+			break;
+		case 3:
+			wm.deleteWorker();
+			break;
+		case 4:
+			wm.modifyWorker();
+			break;
 		default:
+			system("cls");
 			break;
 		}
+		
 	}
-
 	system("pause");
 	return 0;
 }

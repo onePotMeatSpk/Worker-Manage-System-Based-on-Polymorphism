@@ -60,6 +60,11 @@ void WorkerManager::showMenu()
 	cout << "********* Press 0: 退出系统 **********" << endl;
 	cout << "********* Press 1: 添加员工 **********" << endl;
 	cout << "********* Press 2: 显示员工 **********" << endl;
+	cout << "********* Press 3: 删除员工 **********" << endl;
+	cout << "********* Press 4: 修改员工 **********" << endl;
+	cout << "**************************************" << endl;
+
+
 }
 
 void WorkerManager::exitMenu()
@@ -175,8 +180,8 @@ void WorkerManager::addWorker()
 			cout << "请输入第" << i + 1 << "位新员工的名字：" << endl;
 			cin >> newName;
 			cout << "请选择第" << i + 1 << "位新员工的岗位：" << endl;
-			cout << "1->普通员工" << endl;
-			cout << "2->经理" << endl;
+			cout << "1->韭菜" << endl;
+			cout << "2->走狗" << endl;
 			cout << "3->老板" << endl;
 			cin >> newJobName;
 
@@ -213,6 +218,8 @@ void WorkerManager::addWorker()
 
 		//保存添加的员工到文件中
 		this->save();
+
+		this->isFileEmpty = false;
 	}
 	else
 	{
@@ -224,9 +231,153 @@ void WorkerManager::addWorker()
 //显示员工函数
 void WorkerManager::showWorker()
 {
-	cout << "现有员工：" << endl;
+	if (isFileEmpty)
+	{
+		cout << "不存在员工信息！！！" << endl;
+	}
+	else
+	{
+		cout << "现有员工：" << endl;
+		for (int i = 0; i < this->workerNum; i++)
+		{
+			this->workerArray[i]->showInfo();
+		}
+	}
+	system("pause");
+	system("cls");
+}
+
+//员工是否存在函数
+int WorkerManager::isWorkerExist(int id)
+{
+	int index = -1;
 	for (int i = 0; i < this->workerNum; i++)
 	{
-		this->workerArray[i]->showInfo();
+		if(this->workerArray[i]->worker_ID==id)
+		{
+			index = i;
+			break;
+		}
 	}
+	return index;
+}
+
+//删除员工函数
+void WorkerManager::deleteWorker()
+{
+	if (this->isFileEmpty)
+	{
+		cout << "不存在员工信息！！！" << endl;
+	}
+	else
+	{
+		int id;
+		cout << "输入要删除的员工的ID:" << endl;
+		cin >> id;
+		int index = this->isWorkerExist(id);
+		if (index == -1)
+		{
+			cout << "该员工不存在" << endl;
+		}
+		else
+		{
+			//前移覆盖被删员工
+			for (int i = index; i < this->workerNum - 1; i++)
+			{
+				this->workerArray[i] = this->workerArray[i + 1];
+			}
+			this->workerNum--;
+			this->save();
+			cout << "删除成功" << endl;
+		}
+	}
+
+	system("pause");
+	system("cls");
+}
+
+//修改员工函数
+void WorkerManager::modifyWorker()
+{
+	//检查
+	if (this->isFileEmpty)
+	{
+		cout << "不存在员工信息！！！" << endl;
+	}
+	else
+	{
+		int id;
+		cout << "输入要修改的员工的ID:" << endl;
+		cin >> id;
+		int index = this->isWorkerExist(id);
+
+		//检查列表中有无输入id对应员工
+		//列表中无输入id对应员工
+		if (index == -1)
+		{
+			cout << "该员工不存在" << endl;
+		}
+		//列表中有输入id对应员工，开始进行修改
+		else
+		{
+			//创建一个新指针，准备接收修改过后的新
+			Worker* worker=NULL;
+			int choice;
+
+			cout << "是否修改岗位？ 1->是   0->否" << endl;
+			cin >> choice;
+			if (choice == 1)
+			{
+				int newjobname;
+				cout << "输入新岗位: 1->韭菜   2->走狗   3->老板" << endl;
+				cin >> newjobname;
+				switch (newjobname)
+				{
+				case 1:
+					worker = new Employee(this->workerArray[index]->worker_ID, this->workerArray[index]->worker_Name, newjobname);
+					break;
+				case 2:
+					worker = new Manager(this->workerArray[index]->worker_ID, this->workerArray[index]->worker_Name, newjobname);
+					break;
+				case 3:
+					worker = new Boss(this->workerArray[index]->worker_ID, this->workerArray[index]->worker_Name, newjobname);
+					break;
+				default:
+					break;
+				}
+				//腾出旧信息
+				delete this->workerArray[index];
+			}
+			else
+			{
+				worker = this->workerArray[index];
+			}
+
+			cout << "是否修改ID？ 1->是   0->否" << endl;
+			cin >> choice;
+			if (choice == 1)
+			{
+				int newid;
+				cout << "输入新ID:" << endl;
+				cin >> newid;
+				worker->worker_ID = newid;
+			}
+			
+			cout << "是否修改名字？ 1->是   0->否" << endl;
+			cin >> choice;
+			if (choice == 1)
+			{
+				string newname;
+				cout << "输入新名字:" << endl;
+				cin >> newname;
+				worker->worker_Name = newname;
+			}
+			this->workerArray[index] = worker;
+			this->save();
+			cout << "修改成功" << endl;
+		}
+	}
+
+	system("pause");
+	system("cls");
 }
