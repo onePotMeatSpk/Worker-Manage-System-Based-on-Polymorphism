@@ -39,14 +39,20 @@ public:
 	//显示员工函数
 	void showWorker();
 
-	//员工是否存在函数
+	//员工是否存在函数(以id号查询）
 	int isWorkerExist(int id);
+
+	//员工是否存在函数(以姓名查询)
+	int isWorkerExist(string name);
 
 	//删除员工函数
 	void deleteWorker();
 
 	//修改员工函数
 	void modifyWorker();
+
+	//查找员工函数
+	void searchWorker();
 
 public:
 	//现有员工个数

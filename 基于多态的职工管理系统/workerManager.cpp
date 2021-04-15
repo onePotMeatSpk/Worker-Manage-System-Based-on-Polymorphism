@@ -62,6 +62,7 @@ void WorkerManager::showMenu()
 	cout << "********* Press 2: 显示员工 **********" << endl;
 	cout << "********* Press 3: 删除员工 **********" << endl;
 	cout << "********* Press 4: 修改员工 **********" << endl;
+	cout << "********* Press 5: 查询员工 **********" << endl;
 	cout << "**************************************" << endl;
 
 
@@ -69,7 +70,9 @@ void WorkerManager::showMenu()
 
 void WorkerManager::exitMenu()
 {
-	cout << "BYE_BYE!!!" << endl;
+	cout << "再见再见再见!!!" << endl;
+
+	//案件后退出
 	system("pause");
 	exit(0);
 }
@@ -243,17 +246,34 @@ void WorkerManager::showWorker()
 			this->workerArray[i]->showInfo();
 		}
 	}
+
+	//按键后清屏
 	system("pause");
 	system("cls");
 }
 
-//员工是否存在函数
+//员工是否存在函数(以id号查询）
 int WorkerManager::isWorkerExist(int id)
 {
 	int index = -1;
 	for (int i = 0; i < this->workerNum; i++)
 	{
 		if(this->workerArray[i]->worker_ID==id)
+		{
+			index = i;
+			break;
+		}
+	}
+	return index;
+}
+
+//员工是否存在函数(以姓名查询)
+int WorkerManager::isWorkerExist(string name)
+{
+	int index = -1;
+	for (int i = 0; i < this->workerNum; i++)
+	{
+		if (this->workerArray[i]->worker_Name == name)
 		{
 			index = i;
 			break;
@@ -292,6 +312,7 @@ void WorkerManager::deleteWorker()
 		}
 	}
 
+	//按键后清屏
 	system("pause");
 	system("cls");
 }
@@ -378,6 +399,66 @@ void WorkerManager::modifyWorker()
 		}
 	}
 
+	//按键后清屏
+	system("pause");
+	system("cls");
+}
+
+//查找员工函数
+void WorkerManager::searchWorker()
+{
+	if (this->isFileEmpty)
+	{
+		cout << "没有员工！！！" << endl;
+	}
+	else
+	{
+		int choice = 0;
+		do
+		{
+			cout << "请选择通过什么方式查找： 1->ID   2->姓名" << endl;
+			cin >> choice;
+			if (choice == 1)
+			{
+				int id;
+				cout << "请输入要查询的ID：" << endl;
+				cin >> id;
+				int index = this->isWorkerExist(id);
+				if (index == -1)
+				{
+					cout << "无此员工" << endl;
+				}
+				else
+				{
+					this->workerArray[index]->showInfo();
+				}
+				break;
+			}
+			else if (choice == 2)
+			{
+				string name;
+				cout << "请输入要查询的姓名：" << endl;
+				cin >> name;
+				int index = this->isWorkerExist(name);
+				if (index == -1)
+				{
+					cout << "无此员工" << endl;
+				}
+				else
+				{
+					this->workerArray[index]->showInfo();
+				}
+				break;
+			}
+			else
+			{
+				cout << "输入错误，请重新输入" << endl;
+			}
+		} while (choice != 1 && choice != 2);
+	}
+	
+	
+	//按键后清屏
 	system("pause");
 	system("cls");
 }

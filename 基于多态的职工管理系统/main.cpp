@@ -32,6 +32,9 @@ int main()
 		case 4:
 			wm.modifyWorker();
 			break;
+		case 5:
+			wm.searchWorker();
+			break;
 		default:
 			system("cls");
 			break;
