@@ -34,7 +34,6 @@ WorkerManager::WorkerManager()
 	{
 		//取得文件内员工数量
 		this->workerNum = this->getWorkerNum();
-		cout << "现有员工数量：" << this->workerNum << endl;
 
 		//初始化员工列表
 		this->workerArray = new Worker * [this->workerNum];
@@ -63,6 +62,8 @@ void WorkerManager::showMenu()
 	cout << "********* Press 3: 删除员工 **********" << endl;
 	cout << "********* Press 4: 修改员工 **********" << endl;
 	cout << "********* Press 5: 查询员工 **********" << endl;
+	cout << "********* Press 6: 排序员工 **********" << endl;
+	cout << "********* Press 7: 清空文件 **********" << endl;
 	cout << "**************************************" << endl;
 
 
@@ -219,9 +220,10 @@ void WorkerManager::addWorker()
 		//显示现有员工
 		this->showWorker();
 
-		//保存添加的员工到文件中
+		//将修改过后的列表保存到文件中
 		this->save();
 
+		//修改文件过后
 		this->isFileEmpty = false;
 	}
 	else
@@ -229,6 +231,9 @@ void WorkerManager::addWorker()
 		cout << "输入信息有误！" << endl;
 	}
 
+	//按键后清屏
+	system("pause");
+	system("cls");
 }
 
 //显示员工函数
@@ -240,7 +245,8 @@ void WorkerManager::showWorker()
 	}
 	else
 	{
-		cout << "现有员工：" << endl;
+		cout << "现有员工数量：" << this->workerNum << endl;
+		cout << "现有员工如下：" << endl;
 		for (int i = 0; i < this->workerNum; i++)
 		{
 			this->workerArray[i]->showInfo();
@@ -307,7 +313,10 @@ void WorkerManager::deleteWorker()
 				this->workerArray[i] = this->workerArray[i + 1];
 			}
 			this->workerNum--;
+
+			//将修改过后的列表保存到文件中
 			this->save();
+
 			cout << "删除成功" << endl;
 		}
 	}
@@ -394,7 +403,10 @@ void WorkerManager::modifyWorker()
 				worker->worker_Name = newname;
 			}
 			this->workerArray[index] = worker;
+
+			//将修改过后的列表保存到文件中
 			this->save();
+
 			cout << "修改成功" << endl;
 		}
 	}
@@ -410,6 +422,7 @@ void WorkerManager::searchWorker()
 	if (this->isFileEmpty)
 	{
 		cout << "没有员工！！！" << endl;
+
 	}
 	else
 	{
@@ -457,7 +470,81 @@ void WorkerManager::searchWorker()
 		} while (choice != 1 && choice != 2);
 	}
 	
+	//按键后清屏
+	system("pause");
+	system("cls");
+}
+
+//员工排序函数
+void WorkerManager::sortWorker()
+{
+	if (isFileEmpty)
+	{
+		cout << "没有员工！！！" << endl;
+	}
+	else
+	{
+		//定义一个中转指针
+		Worker* tempworker = NULL;
+
+		//冒泡排序
+		for (int i = this->workerNum; i > 0 ; i--)
+		{
+			for (int j = 0; j < i - 1 ; j++)
+			{
+				if (this->workerArray[j]->worker_ID > this->workerArray[j + 1]->worker_ID)
+				{
+					tempworker = this->workerArray[j];
+					this->workerArray[j] = this->workerArray[j + 1];
+					this->workerArray[j + 1] = tempworker;
+				}
+			}
+		}
+
+		//将修改过后的列表保存到文件中
+		this->save();
+	}
+
+	//按键后清屏
+	system("pause");
+	system("cls");
+}
+
+//清空文件内容函数
+void WorkerManager::clearFile()
+{
+	//创建输出流
+	ofstream ofs;
 	
+	//利用ios::trunc将文件中内容清空
+	ofs.open(FILENAME, ios::trunc);
+	ofs.close();
+
+	//清空员工列表
+	if (this->workerArray != NULL)
+	{
+		//首先在员工列表数组中，将每个员工指针所指向的堆区数据释放
+		for (int i = 0; i < this->workerNum; i++)
+		{
+			if (this->workerArray[i] != NULL)
+			{
+				delete this->workerArray[i];
+			}
+		}
+
+		//然后将员工列表数组指针指向的堆区数据释放
+		delete[] this->workerArray;
+
+		//将员工列表数组指针置零，以防野指针
+		this->workerArray = NULL;
+
+		//将员工数量置零
+		this->workerNum = 0;
+
+		//将文件状态置为空
+		this->isFileEmpty = true;
+	}
+
 	//按键后清屏
 	system("pause");
 	system("cls");

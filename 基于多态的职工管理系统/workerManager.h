@@ -54,6 +54,12 @@ public:
 	//查找员工函数
 	void searchWorker();
 
+	//员工排序函数
+	void sortWorker();
+
+	//清空文件内容函数
+	void clearFile();
+
 public:
 	//现有员工个数
 	int workerNum;
